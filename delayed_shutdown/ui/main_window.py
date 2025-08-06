@@ -8,8 +8,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QThread, QTimer, Qt
 from ..constants import (
     APP_TITLE, MONITORING_INTERVAL_SECONDS, MAX_INTERVAL_SECONDS,
-    STYLE_BTN_START, STYLE_BTN_CANCEL, get_stylesheet
+    STYLE_BTN_START, STYLE_BTN_CANCEL
 )
+from .styles import get_stylesheet
 from .ui_state import UIState
 from ..core.worker import MonitorWorker
 
