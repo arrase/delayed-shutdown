@@ -9,7 +9,7 @@ A simple GUI application to shut down your computer after a set of specified pro
 - **Process Monitoring:** Select one or more running processes to monitor.
 - **Automatic Shutdown:** The application will automatically shut down the computer once all monitored processes have finished.
 - **Customizable Interval:** Set the monitoring interval to check if the processes have finished.
-- **Shutdown Countdown:** A 30-second countdown is initiated before shutting down, which can be canceled.
+- **Shutdown Countdown:** A configurable countdown is initiated before shutting down, which can be canceled.
 
 ## Installation
 
@@ -37,7 +37,7 @@ After installation, you can run the application from your terminal:
 delayed-shutdown
 ```
 
-This will open a window where you can select the processes to monitor. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate a 30-second countdown to shut down your computer.
+This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
 
 ## Configuration
 
