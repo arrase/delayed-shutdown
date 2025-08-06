@@ -17,7 +17,7 @@ Tested on Ubuntu ... and should work on Mac OS X.
 
 This project has two recommended installation methods: one for end-users and one for developers.
 
-### For Users (Recommended)
+### For End-Users (Recommended)
 
 The best way to install `delayed-shutdown` is using `pipx`, which installs the application and its dependencies in an isolated environment. This prevents conflicts with other Python packages on your system.
 
