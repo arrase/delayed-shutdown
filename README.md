@@ -13,25 +13,33 @@ A simple GUI application to shut down your computer after a set of specified pro
 
 ## Installation
 
-To install the application and integrate it with your desktop, run the following command in the project's root directory:
+You can install the application using `pip`. This will also automatically create a desktop entry, so you can find it in your application menu.
+
+### From a local clone
+
+If you have cloned the repository, you can install it by running the following command from the project's root directory:
 
 ```bash
-./install.sh
+pip install .
 ```
 
-This will handle the installation of the package and the creation of a `.desktop` file, so you can easily find it in your application menu.
+### Using pipx (recommended)
 
-## Usage
+For a clean, isolated installation, you can use `pipx`.
 
-After installation, you can run the application from your terminal:
+#### From a local clone
 
 ```bash
-delayed-shutdown
+pipx install .
 ```
 
-Or you can find it in your applications menu.
+#### From GitHub
 
-This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
+You can also install it directly from the GitHub repository:
+
+```bash
+pipx install git+https://github.com/arrase/delayed-shutdown.git
+```
 
 ## Configuration
 
@@ -65,6 +73,18 @@ To allow the application to shut down the system without asking for a password, 
     `john ALL=(ALL) NOPASSWD: /usr/sbin/shutdown`
 
 4.  **Save and exit.** In `visudo` (which typically uses an editor like `vi` or `nano`), save the changes and exit. If you're using `vi`, press `Esc` and type `:wq`. If you're using `nano`, press `Ctrl+X`, then `Y`, and `Enter`.
+
+## Usage
+
+After installation, you can run the application from your terminal:
+
+```bash
+delayed-shutdown
+```
+
+Or you can find it in your applications menu.
+
+This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
 
 ## Contributing
 
