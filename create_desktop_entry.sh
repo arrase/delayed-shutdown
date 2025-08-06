@@ -1,22 +1,22 @@
 #!/bin/bash
 set -e
 
-echo "Este script crea una entrada de escritorio para Delayed Shutdown."
-echo "Asume que la aplicación fue instalada usando pipx."
+echo "This script creates a desktop entry for Delayed Shutdown."
+echo "It assumes the application was installed using pipx."
 
-# Verificar si pipx está instalado
+# Check if pipx is installed
 if ! command -v pipx &> /dev/null; then
-    echo "Error: pipx no está instalado o no se encuentra en el PATH."
-    echo "Por favor, instala pipx para continuar."
+    echo "Error: pipx is not installed or not in the PATH."
+    echo "Please install pipx to continue."
     exit 1
 fi
 
-echo "Buscando la instalación de 'delayed-shutdown' con pipx..."
+echo "Searching for 'delayed-shutdown' installation with pipx..."
 
-# Usar la salida JSON de pipx list para mayor robustez
+# Use the JSON output of pipx list for greater robustness
 PIPX_JSON=$(pipx list --json)
 
-# Usar un script de Python para analizar el JSON de forma segura y extraer la ruta del venv
+# Use a Python script to safely parse the JSON and extract the venv path
 GET_VENV_PATH_PY='''
 import sys, json, os
 try:
@@ -35,7 +35,7 @@ try:
     if not app_path:
         sys.exit(1) # No __Path__ found
 
-    # La ruta del venv es dos niveles por encima de la ruta del ejecutable (p. ej., /ruta/al/venv/bin/app)
+    # The venv path is two levels above the executable path (e.g., /path/to/venv/bin/app)
     venv_path = os.path.dirname(os.path.dirname(app_path))
     print(venv_path)
     sys.exit(0)
@@ -46,38 +46,38 @@ except (KeyError, IndexError, json.JSONDecodeError):
 VENV_PATH=$(echo "$PIPX_JSON" | python3 -c "$GET_VENV_PATH_PY")
 
 if [ -z "$VENV_PATH" ]; then
-    echo "Error: No se pudo encontrar 'delayed-shutdown' instalado a través de pipx, o no se pudo determinar su ruta."
-    echo "Asegúrate de que está instalado con: pipx install git+https://github.com/arrase/delayed-shutdown.git"
+    echo "Error: Could not find 'delayed-shutdown' installed via pipx, or its path could not be determined."
+    echo "Make sure it is installed with: pipx install git+https://github.com/arrase/delayed-shutdown.git"
     exit 1
 fi
 
-echo "Ruta del entorno virtual encontrada: $VENV_PATH"
+echo "Virtual environment path found: $VENV_PATH"
 
-# Localizar el ejecutable principal
+# Locate the main executable
 EXECUTABLE_PATH=$(which delayed-shutdown)
 if [ -z "$EXECUTABLE_PATH" ]; then
-    echo "Error: No se pudo encontrar el ejecutable 'delayed-shutdown' en el PATH."
+    echo "Error: Could not find the 'delayed-shutdown' executable in the PATH."
     exit 1
 fi
 
-echo "Ejecutable encontrado en: $EXECUTABLE_PATH"
+echo "Executable found at: $EXECUTABLE_PATH"
 
-# Encontrar la ruta del paquete dentro del venv
+# Find the package path within the venv
 PACKAGE_PATH=$(find "$VENV_PATH" -type d -name "delayed_shutdown" | head -n 1)
 if [ -z "$PACKAGE_PATH" ]; then
-    echo "Error: No se pudo encontrar el directorio del paquete 'delayed_shutdown' dentro de $VENV_PATH."
+    echo "Error: Could not find the 'delayed_shutdown' package directory inside $VENV_PATH."
     exit 1
 fi
 
 ICON_PATH="$PACKAGE_PATH/ui/images/icon.png"
 if [ ! -f "$ICON_PATH" ]; then
-    echo "Error: No se pudo encontrar el icono en la ruta esperada: $ICON_PATH"
+    echo "Error: Could not find the icon at the expected path: $ICON_PATH"
     exit 1
 fi
 
-echo "Icono encontrado en: $ICON_PATH"
+echo "Icon found at: $ICON_PATH"
 
-# Crear el contenido del fichero .desktop
+# Create the content of the .desktop file
 DESKTOP_ENTRY="[Desktop Entry]
 Version=1.0
 Type=Application
@@ -89,15 +89,15 @@ Terminal=false
 Categories=System;Utility;
 "
 
-# Crear el directorio y el fichero .desktop
+# Create the directory and the .desktop file
 APP_DIR="$HOME/.local/share/applications"
 mkdir -p "$APP_DIR"
 DESKTOP_FILE_PATH="$APP_DIR/delayed-shutdown.desktop"
 
-echo "Creando el fichero .desktop en: $DESKTOP_FILE_PATH"
+echo "Creating the .desktop file at: $DESKTOP_FILE_PATH"
 echo -e "$DESKTOP_ENTRY" > "$DESKTOP_FILE_PATH"
 
 chmod +x "$DESKTOP_FILE_PATH"
 
-echo "¡Entrada de escritorio creada con éxito!"
-echo "Puede que necesites reiniciar tu sesión para que aparezca en el menú de aplicaciones."
+echo "Desktop entry created successfully!"
+echo "You may need to restart your session for it to appear in the applications menu."
