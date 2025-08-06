@@ -16,6 +16,25 @@ MAX_INTERVAL_SECONDS = 3600
 # --- Colores y Estilos ---
 STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px;"
 STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
+STYLESHEET = """
+    QListWidget {
+        outline: 0;
+    }
+    QListWidget::item:selected {
+        background-color: #4a4a4a;
+        border: none;
+    }
+    QListWidget::indicator {
+        width: 20px;
+        height: 20px;
+    }
+    QListWidget::indicator:unchecked {
+        image: url(images/unchecked.svg);
+    }
+    QListWidget::indicator:checked {
+        image: url(images/checked.svg);
+    }
+"""
 
 # --- Estados de la UI ---
 class UIState(Enum):
@@ -76,6 +95,8 @@ class ProcessShutdownApp(QMainWindow):
         self._connect_signals()
         self.populate_process_list() # Poblar la lista al inicio
         self.set_ui_state(UIState.IDLE)
+
+        self.setStyleSheet(STYLESHEET)
 
     def _setup_ui(self):
         main_widget = QWidget()
