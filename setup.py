@@ -1,16 +1,16 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="delayed-shutdown",
     version="0.1.0",
-    py_modules=["main"],
+    packages=find_packages(),
     install_requires=[
         "psutil",
         "PyQt6",
     ],
     entry_points={
         "console_scripts": [
-            "delayed-shutdown=main:main",
+            "delayed-shutdown=delayed_shutdown.__main__:main",
         ],
     },
     author="Your Name",

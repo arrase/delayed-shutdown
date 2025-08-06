@@ -2,6 +2,8 @@ import sys
 import time
 import subprocess
 import psutil
+import os
+from importlib import resources
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QListWidget, QListWidgetItem, QPushButton, QLabel, QSpinBox, QMessageBox
@@ -18,25 +20,32 @@ MAX_INTERVAL_SECONDS = 3600
 # --- Colores y Estilos ---
 STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px;"
 STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
-STYLESHEET = """
-    QListWidget {
-        outline: 0;
-    }
-    QListWidget::item:selected {
-        background-color: #4a4a4a;
-        border: none;
-    }
-    QListWidget::indicator {
-        width: 20px;
-        height: 20px;
-    }
-    QListWidget::indicator:unchecked {
-        image: url(images/unchecked.svg);
-    }
-    QListWidget::indicator:checked {
-        image: url(images/checked.svg);
-    }
-"""
+
+def get_stylesheet():
+    with resources.path("delayed_shutdown.images", "unchecked.svg") as unchecked_path:
+        unchecked_path_str = str(unchecked_path).replace("\\", "/")
+    with resources.path("delayed_shutdown.images", "checked.svg") as checked_path:
+        checked_path_str = str(checked_path).replace("\\", "/")
+
+    return f"""
+        QListWidget {{
+            outline: 0;
+        }}
+        QListWidget::item:selected {{
+            background-color: #4a4a4a;
+            border: none;
+        }}
+        QListWidget::indicator {{
+            width: 20px;
+            height: 20px;
+        }}
+        QListWidget::indicator:unchecked {{
+            image: url({unchecked_path_str});
+        }}
+        QListWidget::indicator:checked {{
+            image: url({checked_path_str});
+        }}
+    """
 
 # --- Estados de la UI ---
 class UIState(Enum):
@@ -61,7 +70,7 @@ class MonitorWorker(QObject):
             self.error.emit("No se seleccionaron procesos.")
             return
 
-        self.progress.emit(f"Monitoreando {len(self.pids_to_watch)} proceso(s)...")
+        self.progress.emit(f"Monitoreando {{len(self.pids_to_watch)}} proceso(s)...")
         while self._is_running and self.pids_to_watch:
             self.pids_to_watch = [pid for pid in self.pids_to_watch if psutil.pid_exists(pid)]
             if not self.pids_to_watch:
@@ -70,7 +79,7 @@ class MonitorWorker(QObject):
                 break
 
             names = [psutil.Process(pid).name() for pid in self.pids_to_watch if psutil.pid_exists(pid)]
-            self.progress.emit(f"Esperando a: {', '.join(names[:3])}{'...' if len(names) > 3 else ''}")
+            self.progress.emit(f"Esperando a: {{', '.join(names[:3])}}{{ '...' if len(names) > 3 else ''}}")
             
             for _ in range(self.interval):
                 if not self._is_running:
@@ -98,7 +107,7 @@ class ProcessShutdownApp(QMainWindow):
         self.populate_process_list() # Poblar la lista al inicio
         self.set_ui_state(UIState.IDLE)
 
-        self.setStyleSheet(STYLESHEET)
+        self.setStyleSheet(get_stylesheet())
 
     def _setup_ui(self):
         main_widget = QWidget()
