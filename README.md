@@ -41,18 +41,6 @@ You can also install it directly from the GitHub repository:
 pipx install git+https://github.com/arrase/delayed-shutdown.git
 ```
 
-## Usage
-
-After installation, you can run the application from your terminal:
-
-```bash
-delayed-shutdown
-```
-
-Or you can find it in your applications menu.
-
-This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
-
 ## Configuration
 
 ### Run Shutdown Without a Password
@@ -85,6 +73,18 @@ To allow the application to shut down the system without asking for a password, 
     `john ALL=(ALL) NOPASSWD: /usr/sbin/shutdown`
 
 4.  **Save and exit.** In `visudo` (which typically uses an editor like `vi` or `nano`), save the changes and exit. If you're using `vi`, press `Esc` and type `:wq`. If you're using `nano`, press `Ctrl+X`, then `Y`, and `Enter`.
+
+## Usage
+
+After installation, you can run the application from your terminal:
+
+```bash
+delayed-shutdown
+```
+
+Or you can find it in your applications menu.
+
+This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
 
 ## Contributing
 
