@@ -39,6 +39,42 @@ delayed-shutdown
 
 This will open a window where you can select the processes to monitor. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate a 30-second countdown to shut down your computer.
 
+## Desktop Integration
+
+To make the application appear in your desktop environment's application menu, you can create a `.desktop` file.
+
+### For KDE Plasma (and other Linux Desktops)
+
+1.  **Find the executable path:**
+    First, find where `pipx` installed the application. Open a terminal and run:
+    ```bash
+    which delayed-shutdown
+    ```
+    This will output the full path, for example: `/home/<YOUR USER HERE>/.local/bin/delayed-shutdown`. Copy this path.
+
+2.  **Create the `.desktop` file:**
+    Create a new file in your local applications directory using your favorite text editor (e.g., `kate`, `nano`, `gedit`):
+    ```bash
+    vim ~/.local/share/applications/delayed-shutdown.desktop
+    ```
+
+3.  **Add the following content:**
+    Paste the text below into the file. **Important:** Replace the path in the `Exec=` line with the one you copied in the first step.
+
+    ```ini
+    [Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=Delayed Shutdown
+    Comment=Shutdown computer after specified processes finish
+    Exec=/home/<YOUR USER HERE>/.local/bin/delayed-shutdown
+    Icon=system-shutdown
+    Terminal=false
+    Categories=System;Utility;
+    ```
+
+4.  **Save and close the file.** The application should now appear in your application menu. If it doesn't show up immediately, you may need to log out and log back in.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue if you have any suggestions or find any bugs.
