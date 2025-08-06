@@ -32,15 +32,11 @@ The best way to install `delayed-shutdown` is using `pipx`, which installs the a
 
 After installing with `pipx`, you can create a desktop entry to launch the application from your system's application menu.
 
-Run the following command in your terminal to download and execute the creation script. This avoids having to clone the entire repository.
+Run the following command in your terminal to download and execute the creation script.
 ```bash
 bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_desktop_entry.sh)
 ```
 
-Then, run the provided script:
-```bash
-./create_desktop_entry.sh
-```
 This will create a `delayed-shutdown.desktop` file in `~/.local/share/applications`. You may need to log out and log back in for the application to appear in your menu.
 
 ### For Developers
