@@ -2,7 +2,6 @@ import sys
 import time
 import subprocess
 import psutil
-import os
 from importlib import resources
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -11,13 +10,13 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QThread, QObject, pyqtSignal, Qt, QTimer
 from enum import Enum, auto
 
-# --- Constantes ---
-APP_TITLE = "Apagado Automático por Procesos"
+# --- Constants ---
+APP_TITLE = "Automatic Process-based Shutdown"
 COUNTDOWN_SECONDS = 30
 MONITORING_INTERVAL_SECONDS = 10
 MAX_INTERVAL_SECONDS = 3600
 
-# --- Colores y Estilos ---
+# --- Colors and Styles ---
 STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px;"
 STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
 
@@ -47,13 +46,13 @@ def get_stylesheet():
         }}
     """
 
-# --- Estados de la UI ---
+# --- UI States ---
 class UIState(Enum):
     IDLE = auto()
     MONITORING = auto()
     SHUTDOWN_COUNTDOWN = auto()
 
-# --- Worker de Monitoreo ---
+# --- Monitoring Worker ---
 class MonitorWorker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(str)
@@ -67,30 +66,30 @@ class MonitorWorker(QObject):
 
     def run(self):
         if not self.pids_to_watch:
-            self.error.emit("No se seleccionaron procesos.")
+            self.error.emit("No processes were selected.")
             return
 
-        self.progress.emit(f"Monitoreando {{len(self.pids_to_watch)}} proceso(s)...")
+        self.progress.emit(f"Monitoring {len(self.pids_to_watch)} process(es)...")
         while self._is_running and self.pids_to_watch:
             self.pids_to_watch = [pid for pid in self.pids_to_watch if psutil.pid_exists(pid)]
             if not self.pids_to_watch:
-                self.progress.emit("Todos los procesos finalizaron.")
+                self.progress.emit("All processes have finished.")
                 self.finished.emit()
                 break
 
             names = [psutil.Process(pid).name() for pid in self.pids_to_watch if psutil.pid_exists(pid)]
-            self.progress.emit(f"Esperando a: {{', '.join(names[:3])}}{{ '...' if len(names) > 3 else ''}}")
+            self.progress.emit(f"Waiting for: {', '.join(names[:3])}{'...' if len(names) > 3 else ''}")
             
             for _ in range(self.interval):
                 if not self._is_running:
-                    self.progress.emit("Monitoreo cancelado.")
+                    self.progress.emit("Monitoring canceled.")
                     return
                 time.sleep(1)
 
     def stop(self):
         self._is_running = False
 
-# --- Ventana Principal ---
+# --- Main Window ---
 class ProcessShutdownApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -104,7 +103,7 @@ class ProcessShutdownApp(QMainWindow):
 
         self._setup_ui()
         self._connect_signals()
-        self.populate_process_list() # Poblar la lista al inicio
+        self.populate_process_list() # Populate the list on startup
         self.set_ui_state(UIState.IDLE)
 
         self.setStyleSheet(get_stylesheet())
@@ -116,25 +115,25 @@ class ProcessShutdownApp(QMainWindow):
 
         self.process_list_widget = QListWidget()
         self.process_list_widget.setSortingEnabled(True)
-        layout.addWidget(QLabel("Procesos para monitorear:"))
+        layout.addWidget(QLabel("Processes to monitor:"))
         layout.addWidget(self.process_list_widget)
 
         controls_layout = QHBoxLayout()
-        self.refresh_button = QPushButton("Refrescar")
+        self.refresh_button = QPushButton("Refresh")
         controls_layout.addWidget(self.refresh_button)
         controls_layout.addStretch()
-        controls_layout.addWidget(QLabel("Intervalo (seg):"))
+        controls_layout.addWidget(QLabel("Interval (sec):"))
         self.interval_spinbox = QSpinBox()
         self.interval_spinbox.setRange(1, MAX_INTERVAL_SECONDS)
         self.interval_spinbox.setValue(MONITORING_INTERVAL_SECONDS)
         controls_layout.addWidget(self.interval_spinbox)
         layout.addLayout(controls_layout)
 
-        self.start_button = QPushButton("Iniciar Monitoreo y Apagar")
+        self.start_button = QPushButton("Start Monitoring and Shutdown")
         self.start_button.setStyleSheet(STYLE_BTN_START)
         layout.addWidget(self.start_button)
 
-        self.cancel_button = QPushButton("Cancelar Apagado")
+        self.cancel_button = QPushButton("Cancel Shutdown")
         self.cancel_button.setStyleSheet(STYLE_BTN_CANCEL)
         layout.addWidget(self.cancel_button)
 
@@ -156,11 +155,11 @@ class ProcessShutdownApp(QMainWindow):
         self.start_button.setEnabled(is_idle)
 
         if state == UIState.IDLE:
-            self.statusBar().showMessage("Listo.")
-            self.start_button.setText("Iniciar Monitoreo y Apagar")
+            self.statusBar().showMessage("Ready.")
+            self.start_button.setText("Start Monitoring and Shutdown")
         elif state == UIState.MONITORING:
-            self.start_button.setText("Monitoreando...")
-            self.start_button.setEnabled(False) # Deshabilitado pero visible
+            self.start_button.setText("Monitoring...")
+            self.start_button.setEnabled(False) # Disabled but visible
             self.start_button.setVisible(True)
 
     def toggle_item_check(self, item):
@@ -180,7 +179,7 @@ class ProcessShutdownApp(QMainWindow):
                     item.setData(Qt.ItemDataRole.UserRole, proc.info['pid'])
                     self.process_list_widget.addItem(item)
         except (psutil.Error) as e:
-            self.statusBar().showMessage(f"Error al leer procesos: {e}")
+            self.statusBar().showMessage(f"Error reading processes: {e}")
 
     def start_monitoring(self):
         pids = [self.process_list_widget.item(i).data(Qt.ItemDataRole.UserRole)
@@ -188,7 +187,7 @@ class ProcessShutdownApp(QMainWindow):
                 if self.process_list_widget.item(i).checkState() == Qt.CheckState.Checked]
 
         if not pids:
-            QMessageBox.warning(self, "Selección Vacía", "Seleccione al menos un proceso.")
+            QMessageBox.warning(self, "Empty Selection", "Select at least one process.")
             return
 
         self.set_ui_state(UIState.MONITORING)
@@ -217,7 +216,7 @@ class ProcessShutdownApp(QMainWindow):
 
     def update_shutdown_countdown(self):
         if self.countdown > 0:
-            self.statusBar().showMessage(f"Apagando en {self.countdown}s... Clic en 'Cancelar' para detener.")
+            self.statusBar().showMessage(f"Shutting down in {self.countdown}s... Click 'Cancel' to stop.")
             self.countdown -= 1
         else:
             self.shutdown_timer.stop()
@@ -226,18 +225,18 @@ class ProcessShutdownApp(QMainWindow):
     def cancel_shutdown(self):
         self.shutdown_timer.stop()
         self.set_ui_state(UIState.IDLE)
-        self.statusBar().showMessage("Apagado cancelado.")
+        self.statusBar().showMessage("Shutdown canceled.")
 
     def initiate_shutdown(self):
-        self.statusBar().showMessage("Apagando el sistema...")
+        self.statusBar().showMessage("Shutting down the system...")
         try:
             if sys.platform in ["linux", "darwin"]:
                 subprocess.run(["sudo", "shutdown", "-h", "now"], check=True)
             else:
-                self.on_monitoring_error(f"Apagado no soportado en {sys.platform}")
+                self.on_monitoring_error(f"Shutdown not supported on {sys.platform}")
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            msg = f"No se pudo apagar: {e}. Puede requerir privilegios de administrador."
-            QMessageBox.critical(self, "Error de Apagado", msg)
+            msg = f"Could not shut down: {e}. It may require administrator privileges."
+            QMessageBox.critical(self, "Shutdown Error", msg)
             self.set_ui_state(UIState.IDLE)
 
     def closeEvent(self, event):
