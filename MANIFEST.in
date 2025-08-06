@@ -1,4 +1,4 @@
 include README.md
 include LICENSE
 include image.png
-graft delayed_shutdown/images
+graft delayed_shutdown/ui/images
