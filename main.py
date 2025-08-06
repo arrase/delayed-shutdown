@@ -132,6 +132,7 @@ class ProcessShutdownApp(QMainWindow):
         self.start_button.clicked.connect(self.start_monitoring)
         self.cancel_button.clicked.connect(self.cancel_shutdown)
         self.shutdown_timer.timeout.connect(self.update_shutdown_countdown)
+        self.process_list_widget.itemClicked.connect(self.toggle_item_check)
 
     def set_ui_state(self, state):
         self.start_button.setVisible(state == UIState.IDLE)
@@ -151,6 +152,11 @@ class ProcessShutdownApp(QMainWindow):
             self.start_button.setEnabled(False) # Deshabilitado pero visible
             self.start_button.setVisible(True)
 
+    def toggle_item_check(self, item):
+        item.setCheckState(
+            Qt.CheckState.Checked if item.checkState() == Qt.CheckState.Unchecked else Qt.CheckState.Unchecked
+        )
+
     def populate_process_list(self):
         self.process_list_widget.clear()
         try:
@@ -158,7 +164,7 @@ class ProcessShutdownApp(QMainWindow):
             for proc in psutil.process_iter(['pid', 'name', 'username']):
                 if proc.info.get('username') == current_user and proc.info.get('name'):
                     item = QListWidgetItem(f"{proc.info['name']} (PID: {proc.info['pid']})")
-                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+                    item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsUserCheckable)
                     item.setCheckState(Qt.CheckState.Unchecked)
                     item.setData(Qt.ItemDataRole.UserRole, proc.info['pid'])
                     self.process_list_widget.addItem(item)
