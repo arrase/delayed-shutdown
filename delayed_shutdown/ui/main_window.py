@@ -6,13 +6,18 @@ from PyQt6.QtWidgets import (
     QListWidget, QListWidgetItem, QPushButton, QLabel, QSpinBox, QMessageBox
 )
 from PyQt6.QtCore import QThread, QTimer, Qt
-from ..constants import (
-    APP_TITLE, MONITORING_INTERVAL_SECONDS, MAX_INTERVAL_SECONDS,
-    STYLE_BTN_START, STYLE_BTN_CANCEL
-)
+from enum import Enum, auto
 from .styles import get_stylesheet
-from .ui_state import UIState
 from ..core.worker import MonitorWorker
+
+APP_TITLE = "Automatic Process-based Shutdown"
+MONITORING_INTERVAL_SECONDS = 10
+MAX_INTERVAL_SECONDS = 3600
+
+class UIState(Enum):
+    IDLE = auto()
+    MONITORING = auto()
+    SHUTDOWN_COUNTDOWN = auto()
 
 class ProcessShutdownApp(QMainWindow):
     def __init__(self):
@@ -61,11 +66,11 @@ class ProcessShutdownApp(QMainWindow):
         layout.addLayout(controls_layout)
 
         self.start_button = QPushButton("Start Monitoring and Shutdown")
-        self.start_button.setStyleSheet(STYLE_BTN_START)
+        self.start_button.setObjectName("start-button")
         layout.addWidget(self.start_button)
 
         self.cancel_button = QPushButton("Cancel Shutdown")
-        self.cancel_button.setStyleSheet(STYLE_BTN_CANCEL)
+        self.cancel_button.setObjectName("cancel-button")
         layout.addWidget(self.cancel_button)
 
     def _connect_signals(self):
@@ -96,7 +101,7 @@ class ProcessShutdownApp(QMainWindow):
 
     def toggle_item_check(self, item):
         item.setCheckState(
-            Qt.CheckState.Checked if item.checkState() == Qt.CheckState.Unchecked else Qt.CheckState.Unchecked
+            Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked else Qt.CheckState.Checked
         )
 
     def populate_process_list(self):
