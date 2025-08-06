@@ -29,18 +29,4 @@ def get_stylesheet():
         QListWidget::indicator:checked {{
             image: url({checked_path_str});
         }}
-
-        .start-button {{
-            background-color: #4CAF50;
-            color: white;
-            font-weight: bold;
-            padding: 10px;
-        }}
-
-        .cancel-button {{
-            background-color: #f44336;
-            color: white;
-            font-weight: bold;
-            padding: 10px;
-        }}
     """
