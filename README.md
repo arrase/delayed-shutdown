@@ -2,6 +2,8 @@
 
 A simple GUI application to shut down your computer after a set of specified processes have finished executing.
 
+Tested on Ubuntu and should work on Mac OS X
+
 ![Application Screenshot](screenshot.png)
 
 ## Features
