@@ -12,7 +12,6 @@ from enum import Enum, auto
 
 # --- Constants ---
 APP_TITLE = "Automatic Process-based Shutdown"
-COUNTDOWN_SECONDS = 30
 MONITORING_INTERVAL_SECONDS = 10
 MAX_INTERVAL_SECONDS = 3600
 
@@ -99,7 +98,7 @@ class ProcessShutdownApp(QMainWindow):
         self.monitor_thread = None
         self.monitor_worker = None
         self.shutdown_timer = QTimer(self)
-        self.countdown = COUNTDOWN_SECONDS
+        self.countdown = 30
 
         self._setup_ui()
         self._connect_signals()
@@ -127,6 +126,13 @@ class ProcessShutdownApp(QMainWindow):
         self.interval_spinbox.setRange(1, MAX_INTERVAL_SECONDS)
         self.interval_spinbox.setValue(MONITORING_INTERVAL_SECONDS)
         controls_layout.addWidget(self.interval_spinbox)
+
+        controls_layout.addWidget(QLabel("Shutdown in (sec):"))
+        self.shutdown_spinbox = QSpinBox()
+        self.shutdown_spinbox.setRange(1, MAX_INTERVAL_SECONDS)
+        self.shutdown_spinbox.setValue(30)
+        controls_layout.addWidget(self.shutdown_spinbox)
+
         layout.addLayout(controls_layout)
 
         self.start_button = QPushButton("Start Monitoring and Shutdown")
@@ -152,6 +158,7 @@ class ProcessShutdownApp(QMainWindow):
         self.process_list_widget.setEnabled(is_idle)
         self.refresh_button.setEnabled(is_idle)
         self.interval_spinbox.setEnabled(is_idle)
+        self.shutdown_spinbox.setEnabled(is_idle)
         self.start_button.setEnabled(is_idle)
 
         if state == UIState.IDLE:
@@ -210,7 +217,7 @@ class ProcessShutdownApp(QMainWindow):
 
     def start_shutdown_countdown(self):
         self.set_ui_state(UIState.SHUTDOWN_COUNTDOWN)
-        self.countdown = COUNTDOWN_SECONDS
+        self.countdown = self.shutdown_spinbox.value()
         self.update_shutdown_countdown()
         self.shutdown_timer.start(1000)
 
