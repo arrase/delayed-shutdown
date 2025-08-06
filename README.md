@@ -13,7 +13,7 @@ A simple GUI application to shut down your computer after a set of specified pro
 
 ## Installation
 
-You can install the application using `pip`. This will also automatically create a desktop entry, so you can find it in your application menu.
+You can install the application using `pip`.
 
 ### From a local clone
 
@@ -31,6 +31,18 @@ You can also install it directly from the GitHub repository:
 ```bash
 pipx install git+https://github.com/arrase/delayed-shutdown.git
 ```
+
+### Desktop Entry (for Linux)
+
+After installing the application, you can create a desktop entry to launch it from your application menu.
+
+Run the following script from the project's root directory:
+
+```bash
+./create_desktop_entry.sh
+```
+
+This will create a `delayed-shutdown.desktop` file in `~/.local/share/applications`. You may need to log out and log back in for the application to appear in your menu.
 
 ## Configuration
 
