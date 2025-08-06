@@ -26,7 +26,7 @@ class MonitorWorker(QObject):
                 self.finished.emit()
                 break
 
-            names = [psutil.Process(pid).name() for pid in self.pids_to_watch]
+            names = [psutil.Process(pid).name() for pid in self.pids_to_watch if psutil.pid_exists(pid)]
             self.progress.emit(f"Waiting for: {', '.join(names[:3])}{'...' if len(names) > 3 else ''}")
 
             for _ in range(self.interval):
