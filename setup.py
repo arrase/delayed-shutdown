@@ -15,12 +15,11 @@ class PostInstallCommand(install):
             print("Skipping .desktop file creation on non-linux platform")
             return
 
-        # Get the installation paths from the install command.
-        # self.install_scripts is the directory where executables are installed,
-        # and self.install_lib is the directory where the package is installed.
+        # self.install_lib is the directory where the package is installed.
         # This ensures we have the final, absolute paths after installation.
-        exe_path = os.path.join(self.install_scripts, 'delayed-shutdown')
-        icon_path = os.path.join(self.install_lib, 'delayed_shutdown', 'ui', 'images', 'icon.png')
+        icon_path = os.path.abspath(os.path.join(
+            self.install_lib, 'delayed_shutdown', 'ui', 'images', 'icon.png'
+        ))
 
         desktop_entry = f"""
 [Desktop Entry]
@@ -28,7 +27,7 @@ Version=1.0
 Type=Application
 Name=Delayed Shutdown
 Comment=Shutdown computer after specified processes finish
-Exec={exe_path}
+Exec=delayed-shutdown
 Icon={icon_path}
 Terminal=false
 Categories=System;Utility;
