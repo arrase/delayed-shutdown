@@ -2,7 +2,7 @@
 
 A simple GUI application to shut down your computer after a set of specified processes have finished executing.
 
-![Application Screenshot](image.png)
+![Application Screenshot](screenshot.png)
 
 ## Features
 
