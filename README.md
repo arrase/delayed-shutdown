@@ -13,36 +13,58 @@ A simple GUI application to shut down your computer after a set of specified pro
 
 ## Installation
 
-You can install the application using `pip`.
+This project has two recommended installation methods: one for end-users and one for developers.
 
-### From a local clone
+### For Users (Recommended)
 
-If you have cloned the repository, you can install it by running the following command from the project's root directory:
+The best way to install `delayed-shutdown` is using `pipx`, which installs the application and its dependencies in an isolated environment. This prevents conflicts with other Python packages on your system.
 
+1.  **Install pipx:**
+    If you don't have `pipx` installed, follow the official installation instructions: [Install pipx](https://pipx.pypa.io/stable/installation/).
+
+2.  **Install the application:**
+    You can install `delayed-shutdown` directly from its GitHub repository:
+    ```bash
+    pipx install git+https://github.com/arrase/delayed-shutdown.git
+    ```
+
+#### Creating a Desktop Entry on Linux
+
+After installing with `pipx`, you can create a desktop entry to launch the application from your system's application menu.
+
+First, clone this repository to get access to the script:
 ```bash
-pip install .
+git clone https://github.com/arrase/delayed-shutdown.git
+cd delayed-shutdown
 ```
 
-### Using pipx (recommended)
-
-For a clean, isolated installation, you can use `pipx`.
-You can also install it directly from the GitHub repository:
-
-```bash
-pipx install git+https://github.com/arrase/delayed-shutdown.git
-```
-
-### Desktop Entry (for Linux)
-
-After installing the application, you can create a desktop entry to launch it from your application menu.
-
-Run the following script from the project's root directory:
-
+Then, run the provided script:
 ```bash
 ./create_desktop_entry.sh
 ```
-
 This will create a `delayed-shutdown.desktop` file in `~/.local/share/applications`. You may need to log out and log back in for the application to appear in your menu.
+
+### For Developers
+
+If you want to contribute to the project, you should set up a local development environment.
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/arrase/delayed-shutdown.git
+    cd delayed-shutdown
+    ```
+
+2.  **Create and activate a virtual environment:**
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+
+3.  **Install the project in editable mode:**
+    This will install the package, but any changes you make to the source code will be immediately reflected when you run the application.
+    ```bash
+    pip install -e .
+    ```
 
 ## Configuration
 
