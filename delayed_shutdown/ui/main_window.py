@@ -162,7 +162,7 @@ class ProcessShutdownApp(QMainWindow):
     def initiate_shutdown(self):
         self.statusBar().showMessage("Shutting down the system...")
         try:
-            if sys.platform in ["linux", "darwin"]:
+            if sys.platform == "linux":
                 subprocess.run(["sudo", "shutdown", "-h", "now"], check=True)
             else:
                 self.on_monitoring_error(f"Shutdown not supported on {sys.platform}")
