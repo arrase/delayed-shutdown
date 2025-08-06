@@ -25,10 +25,20 @@ pip install .
 
 ### Using pipx (recommended)
 
-For a clean, isolated installation, you can use `pipx`:
+For a clean, isolated installation, you can use `pipx`.
+
+#### From a local clone
 
 ```bash
 pipx install .
+```
+
+#### From GitHub
+
+You can also install it directly from the GitHub repository:
+
+```bash
+pipx install git+https://github.com/arrase/delayed-shutdown.git
 ```
 
 ## Usage
