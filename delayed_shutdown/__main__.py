@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from .main_window import ProcessShutdownApp
+from delayed_shutdown.ui.main_window import ProcessShutdownApp
 
 def main():
     app = QApplication(sys.argv)

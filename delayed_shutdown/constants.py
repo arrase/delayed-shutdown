@@ -10,9 +10,9 @@ STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; p
 STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
 
 def get_stylesheet():
-    with resources.path("delayed_shutdown.images", "unchecked.svg") as unchecked_path:
+    with resources.path("delayed_shutdown.ui.images", "unchecked.svg") as unchecked_path:
         unchecked_path_str = str(unchecked_path).replace("\\", "/")
-    with resources.path("delayed_shutdown.images", "checked.svg") as checked_path:
+    with resources.path("delayed_shutdown.ui.images", "checked.svg") as checked_path:
         checked_path_str = str(checked_path).replace("\\", "/")
 
     return f"""
