@@ -15,25 +15,14 @@ class PostInstallCommand(install):
             print("Skipping .desktop file creation on non-linux platform")
             return
 
-        # The executable path is simply the name of the script, as it will be in the PATH
-        exe_path = 'delayed-shutdown'
+        # Get the installation paths from the install command.
+        # self.install_scripts is the directory where executables are installed,
+        # and self.install_lib is the directory where the package is installed.
+        # This ensures we have the final, absolute paths after installation.
+        exe_path = os.path.join(self.install_scripts, 'delayed-shutdown')
+        icon_path = os.path.join(self.install_lib, 'delayed_shutdown', 'ui', 'images', 'icon.png')
 
-        # It's not straightforward to get the icon path reliably after installation.
-        # A common approach is to place it in a standard location or to use a post-install script
-        # that knows about the package structure.
-        # For pipx, the package is installed in an isolated environment.
-        # We'll assume the icon is located relative to the package.
-        # A better long-term solution might be to use `pkg_resources` or `importlib.resources`.
-        # For now, this dynamic path finding should be more reliable.
-
-        # We need to find where the package is installed to locate the icon.
-        # A simple way is to import the package and check its __file__ attribute.
-        # This part of the script runs *after* the package has been installed.
-        import delayed_shutdown
-        package_path = os.path.dirname(delayed_shutdown.__file__)
-        icon_path = os.path.join(package_path, 'ui', 'images', 'icon.png')
-
-        desktop_entry = f"""\
+        desktop_entry = f"""
 [Desktop Entry]
 Version=1.0
 Type=Application
