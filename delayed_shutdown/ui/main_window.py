@@ -42,7 +42,7 @@ class ProcessShutdownApp(QMainWindow):
         self.setCentralWidget(main_widget)
         layout = QVBoxLayout(main_widget)
         
-        # Lista de procesos
+        # Process list
         self.process_list_widget = QListWidget()
         self.process_list_widget.setSortingEnabled(True)
         layout.addWidget(QLabel("Processes to monitor:"))
