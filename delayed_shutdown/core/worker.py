@@ -31,7 +31,7 @@ class MonitorWorker(QObject):
                 self.finished.emit()
                 break
                 
-            # Actualizar lista de PIDs a monitorizar
+            # Update list of PIDs to monitor
             self.pids_to_watch = active_pids
             
             # Obtener nombres de procesos con cache
