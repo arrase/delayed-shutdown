@@ -16,7 +16,9 @@ MONITORING_INTERVAL_SECONDS = 10
 MAX_INTERVAL_SECONDS = 3600
 DEFAULT_COUNTDOWN_SECONDS = 30
 STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px;"
+STYLE_BTN_STOP = "background-color: orange; color: white; font-weight: bold; padding: 10px;"
 STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
+STYLE_BTN_SHUTDOWN = "background-color: red; color: white; font-weight: bold; padding: 10px;"
 
 class ProcessShutdownApp(QMainWindow):
     def __init__(self):
@@ -30,6 +32,10 @@ class ProcessShutdownApp(QMainWindow):
         self.shutdown_timer = QTimer(self)
         self.countdown = DEFAULT_COUNTDOWN_SECONDS
         self.selected_pids = set()  # Use set for more efficient operations
+
+        # Monitoring and countdown state
+        self.monitoring_active = False
+        self.shutdown_countdown_active = False
 
         # Initial configuration
         self._setup_ui()
@@ -79,16 +85,11 @@ class ProcessShutdownApp(QMainWindow):
         self.start_button = QPushButton("Start Monitoring and Shutdown")
         self.start_button.setStyleSheet(STYLE_BTN_START)
         layout.addWidget(self.start_button)
-        
-        self.cancel_button = QPushButton("Cancel Shutdown")
-        self.cancel_button.setStyleSheet(STYLE_BTN_CANCEL)
-        layout.addWidget(self.cancel_button)
 
     def _connect_signals(self):
         """Connects signals to their respective slots."""
         self.refresh_button.clicked.connect(self.populate_process_list)
-        self.start_button.clicked.connect(self.start_monitoring)
-        self.cancel_button.clicked.connect(self.cancel_shutdown)
+        self.start_button.clicked.connect(self.handle_main_button)
         self.shutdown_timer.timeout.connect(self.update_shutdown_countdown)
         self.process_list_widget.itemChanged.connect(self._update_selected_pids)
         self.process_list_widget.itemClicked.connect(self.toggle_item_check)
@@ -104,28 +105,49 @@ class ProcessShutdownApp(QMainWindow):
     def set_ui_state(self, state):
         """Updates the interface according to the current state."""
         is_idle = state == UIState.IDLE
-        
-        # Main button visibility
-        self.start_button.setVisible(is_idle or state == UIState.MONITORING)
-        self.cancel_button.setVisible(state == UIState.SHUTDOWN_COUNTDOWN)
-        
-        # Control enablement
+        is_monitoring = state == UIState.MONITORING
+        is_shutdown = state == UIState.SHUTDOWN_COUNTDOWN
+
         self.process_list_widget.setEnabled(is_idle)
         self.refresh_button.setEnabled(is_idle)
         self.interval_spinbox.setEnabled(is_idle)
         self.shutdown_spinbox.setEnabled(is_idle)
-        
-        # Start button state
-        if state == UIState.IDLE:
+
+        if is_idle:
             self.start_button.setText("Start Monitoring and Shutdown")
+            self.start_button.setStyleSheet(STYLE_BTN_START)
             self.start_button.setEnabled(True)
+            self.monitoring_active = False
+            self.shutdown_countdown_active = False
             self.statusBar().showMessage("Ready.")
-        elif state == UIState.MONITORING:
-            self.start_button.setText("Monitoring...")
-            self.start_button.setEnabled(False)
+        elif is_monitoring:
+            self.start_button.setText("Stop monitoring")
+            self.start_button.setStyleSheet(STYLE_BTN_STOP)
+            self.start_button.setEnabled(True)
+            self.monitoring_active = True
+            self.shutdown_countdown_active = False
+            self.statusBar().showMessage("Monitoring processes...")
+        elif is_shutdown:
+            self.start_button.setText("Cancel shutdown")
+            self.start_button.setStyleSheet(STYLE_BTN_SHUTDOWN)
+            self.start_button.setEnabled(True)
+            self.monitoring_active = False
+            self.shutdown_countdown_active = True
+
+    def handle_main_button(self):
+        """Handles the main button behavior according to the current state."""
+        if self.monitoring_active:
+            # Detener monitorización
+            self.stop_monitoring()
+        elif self.shutdown_countdown_active:
+            # Cancelar apagado
+            self.cancel_shutdown()
+        else:
+            # Iniciar monitorización
+            self.start_monitoring()
 
     def toggle_item_check(self, item):
-        """Inverts the selection state of an element in the list."""
+        """Inverts the selection state of a list item."""
         new_state = Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked else Qt.CheckState.Checked
         item.setCheckState(new_state)
 
@@ -166,27 +188,30 @@ class ProcessShutdownApp(QMainWindow):
         if not self.selected_pids:
             QMessageBox.warning(self, "Empty Selection", "Select at least one process.")
             return
-        
+
         self.set_ui_state(UIState.MONITORING)
-        
-        # Create and configure monitoring thread
+
         self.monitor_thread = QThread()
         self.monitor_worker = MonitorWorker(self.selected_pids, self.interval_spinbox.value())
         self.monitor_worker.moveToThread(self.monitor_thread)
-        
-        # Connect signals
+
         self.monitor_worker.finished.connect(self.start_shutdown_countdown)
         self.monitor_worker.progress.connect(self.statusBar().showMessage)
         self.monitor_worker.error.connect(self.on_monitoring_error)
         self.monitor_thread.started.connect(self.monitor_worker.run)
         self.monitor_thread.finished.connect(self.monitor_thread.deleteLater)
-        
+
         self.monitor_thread.start()
 
-    def on_monitoring_error(self, message):
-        """Handles errors during monitoring."""
-        QMessageBox.critical(self, "Error", message)
+    def stop_monitoring(self):
+        """Stops monitoring and returns to the initial state."""
+        if self.monitor_worker:
+            self.monitor_worker.stop()
+        if self.monitor_thread:
+            self.monitor_thread.quit()
+            self.monitor_thread.wait()
         self.set_ui_state(UIState.IDLE)
+        self.statusBar().showMessage("Monitoring canceled.")
 
     def start_shutdown_countdown(self):
         """Starts the countdown for shutdown."""
@@ -198,14 +223,14 @@ class ProcessShutdownApp(QMainWindow):
     def update_shutdown_countdown(self):
         """Updates the countdown and shows the remaining time."""
         if self.countdown > 0:
-            self.statusBar().showMessage(f"Shutting down in {self.countdown}s... Click 'Cancel' to stop.")
+            self.statusBar().showMessage(f"Shutting down in {self.countdown}s... Click 'Cancel shutdown' to stop.")
             self.countdown -= 1
         else:
             self.shutdown_timer.stop()
             self.initiate_shutdown()
 
     def cancel_shutdown(self):
-        """Cancels the scheduled shutdown."""
+        """Cancels the scheduled shutdown and returns to the initial state."""
         self.shutdown_timer.stop()
         self.set_ui_state(UIState.IDLE)
         self.statusBar().showMessage("Shutdown canceled.")
@@ -220,10 +245,20 @@ class ProcessShutdownApp(QMainWindow):
             QMessageBox.critical(self, "Shutdown Error", msg)
             self.set_ui_state(UIState.IDLE)
 
+    def on_monitoring_error(self, message):
+        """Handles errors during monitoring."""
+        QMessageBox.critical(self, "Error", message)
+        self.set_ui_state(UIState.IDLE)
+
     def closeEvent(self, event):
         """Handles the window close event."""
-        if self.monitor_thread and self.monitor_thread.isRunning():
-            self.monitor_worker.stop()
-            self.monitor_thread.quit()
-            self.monitor_thread.wait()
+        # Avoid RuntimeError if QThread has been deleted
+        if isinstance(self.monitor_thread, QThread) and self.monitor_thread is not None:
+            try:
+                if self.monitor_thread.isRunning():
+                    self.monitor_worker.stop()
+                    self.monitor_thread.quit()
+                    self.monitor_thread.wait()
+            except RuntimeError:
+                pass  # Thread already deleted
         event.accept()
