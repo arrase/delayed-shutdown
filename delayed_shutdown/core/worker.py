@@ -9,7 +9,7 @@ class MonitorWorker(QObject):
 
     def __init__(self, pids_to_watch, interval):
         super().__init__()
-        self.pids_to_watch = set(pids_to_watch)  # Usar set para búsquedas más eficientes
+        self.pids_to_watch = set(pids_to_watch)  # Use set for more efficient searches
         self.interval = interval
         self._is_running = True
         self._process_names = {}  # Cache for process names
