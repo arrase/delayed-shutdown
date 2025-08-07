@@ -25,7 +25,7 @@ class MonitorWorker(QObject):
             # Update list of existing PIDs more efficiently
             active_pids = {pid for pid in self.pids_to_watch if psutil.pid_exists(pid)}
             
-            # Si no quedan procesos activos, terminar
+            # If no active processes remain, terminate
             if not active_pids:
                 self.progress.emit("All processes have finished.")
                 self.finished.emit()
