@@ -120,7 +120,7 @@ class ProcessShutdownApp(QMainWindow):
             self.start_button.setEnabled(False)
 
     def toggle_item_check(self, item):
-        """Invierte el estado de selección de un elemento en la lista."""
+        """Inverts the selection state of an element in the list."""
         new_state = Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked else Qt.CheckState.Checked
         item.setCheckState(new_state)
 
