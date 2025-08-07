@@ -125,7 +125,7 @@ class ProcessShutdownApp(QMainWindow):
         item.setCheckState(new_state)
 
     def populate_process_list(self):
-        """Rellena la lista de procesos de forma más eficiente."""
+        """Populates the process list more efficiently."""
         current_selection = self.selected_pids.copy()
         self.process_list_widget.clear()
         self.selected_pids.clear()
