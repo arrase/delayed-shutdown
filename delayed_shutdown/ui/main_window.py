@@ -143,7 +143,7 @@ class ProcessShutdownApp(QMainWindow):
             # Cancelar apagado
             self.cancel_shutdown()
         else:
-            # Iniciar monitorización
+            # Start monitoring
             self.start_monitoring()
 
     def toggle_item_check(self, item):
