@@ -190,7 +190,7 @@ class ProcessShutdownApp(QMainWindow):
         self.shutdown_timer.start(1000)
 
     def update_shutdown_countdown(self):
-        """Actualiza la cuenta atrás y muestra el tiempo restante."""
+        """Updates the countdown and shows the remaining time."""
         if self.countdown > 0:
             self.statusBar().showMessage(f"Shutting down in {self.countdown}s... Click 'Cancel' to stop.")
             self.countdown -= 1
