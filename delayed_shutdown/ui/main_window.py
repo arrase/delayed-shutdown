@@ -110,7 +110,7 @@ class ProcessShutdownApp(QMainWindow):
         self.interval_spinbox.setEnabled(is_idle)
         self.shutdown_spinbox.setEnabled(is_idle)
         
-        # Estado del botón de inicio
+        # Start button state
         if state == UIState.IDLE:
             self.start_button.setText("Start Monitoring and Shutdown")
             self.start_button.setEnabled(True)
