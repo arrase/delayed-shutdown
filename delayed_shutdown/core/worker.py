@@ -39,11 +39,16 @@ class MonitorWorker(QObject):
             
             # Get process names with cache
             names = []
-            for pid in active_pids:
+            # Make a copy of active_pids to iterate, since we may remove items
+            for pid in list(active_pids):
                 if pid not in self._process_names:
                     try:
                         self._process_names[pid] = psutil.Process(pid).name()
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    except psutil.NoSuchProcess:
+                        # Remove PID from active_pids if process no longer exists
+                        active_pids.discard(pid)
+                        continue  # Don't add to names list
+                    except psutil.AccessDenied:
                         self._process_names[pid] = f"Unknown (PID: {pid})"
                 names.append(self._process_names[pid])
                 
