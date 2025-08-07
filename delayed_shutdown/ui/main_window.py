@@ -89,7 +89,7 @@ class ProcessShutdownApp(QMainWindow):
         self.process_list_widget.itemChanged.connect(self._update_selected_pids)
 
     def _update_selected_pids(self, item):
-        """Actualiza el conjunto de PIDs seleccionados cuando cambia el estado de un item."""
+        """Updates the set of selected PIDs when an item's state changes."""
         pid = item.data(Qt.ItemDataRole.UserRole)
         if item.checkState() == Qt.CheckState.Checked:
             self.selected_pids.add(pid)
