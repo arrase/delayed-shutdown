@@ -33,7 +33,7 @@ class ProcessShutdownApp(QMainWindow):
         self.populate_process_list()
         self.set_ui_state(UIState.IDLE)
         
-        # Aplicar estilos
+        # Apply styles
         self.setStyleSheet(get_stylesheet())
 
     def _setup_ui(self):
