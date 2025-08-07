@@ -156,7 +156,7 @@ class ProcessShutdownApp(QMainWindow):
             self.statusBar().showMessage(f"Error reading processes: {e}")
 
     def start_monitoring(self):
-        """Inicia el monitoreo de procesos seleccionados."""
+        """Starts monitoring of selected processes."""
         if not self.selected_pids:
             QMessageBox.warning(self, "Empty Selection", "Select at least one process.")
             return
