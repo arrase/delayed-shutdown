@@ -140,7 +140,7 @@ class ProcessShutdownApp(QMainWindow):
             # Stop monitoring
             self.stop_monitoring()
         elif self.shutdown_countdown_active:
-            # Cancelar apagado
+            # Cancel shutdown
             self.cancel_shutdown()
         else:
             # Start monitoring
