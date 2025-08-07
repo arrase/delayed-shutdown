@@ -145,8 +145,8 @@ class ProcessShutdownApp(QMainWindow):
                 proc_info = proc.info
                 if proc_info['username'] == current_user and proc_info['name']:
                     item = QListWidgetItem(f"{proc_info['name']} (PID: {proc_info['pid']})")
-                    # Add ItemIsUserCheckable to allow user interaction with checkboxes
-                    item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsUserCheckable)
+                    # Remove ItemIsUserCheckable to prevent user interaction with checkboxes
+                    item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
                     
                     # Restore previous selection
                     if proc_info['pid'] in current_selection:
