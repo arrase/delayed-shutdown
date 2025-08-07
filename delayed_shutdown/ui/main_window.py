@@ -137,7 +137,7 @@ class ProcessShutdownApp(QMainWindow):
     def handle_main_button(self):
         """Handles the main button behavior according to the current state."""
         if self.monitoring_active:
-            # Detener monitorización
+            # Stop monitoring
             self.stop_monitoring()
         elif self.shutdown_countdown_active:
             # Cancelar apagado
