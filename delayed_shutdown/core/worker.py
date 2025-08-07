@@ -22,7 +22,7 @@ class MonitorWorker(QObject):
         self.progress.emit(f"Monitoring {len(self.pids_to_watch)} process(es)...")
         
         while self._is_running and self.pids_to_watch:
-            # Actualizar lista de PIDs existentes de manera más eficiente
+            # Update list of existing PIDs more efficiently
             active_pids = {pid for pid in self.pids_to_watch if psutil.pid_exists(pid)}
             
             # Si no quedan procesos activos, terminar
