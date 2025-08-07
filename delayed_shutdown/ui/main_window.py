@@ -163,7 +163,7 @@ class ProcessShutdownApp(QMainWindow):
         
         self.set_ui_state(UIState.MONITORING)
         
-        # Crear y configurar el hilo de monitoreo
+        # Create and configure monitoring thread
         self.monitor_thread = QThread()
         self.monitor_worker = MonitorWorker(self.selected_pids, self.interval_spinbox.value())
         self.monitor_worker.moveToThread(self.monitor_thread)
