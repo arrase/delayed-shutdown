@@ -27,7 +27,7 @@ class ProcessShutdownApp(QMainWindow):
         self.countdown = 30
         self.selected_pids = set()  # Usar set para operaciones más eficientes
 
-        # Configuración inicial
+        # Initial configuration
         self._setup_ui()
         self._connect_signals()
         self.populate_process_list()
