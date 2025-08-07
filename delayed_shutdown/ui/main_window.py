@@ -71,7 +71,7 @@ class ProcessShutdownApp(QMainWindow):
         
         layout.addLayout(controls_layout)
         
-        # Botones principales
+        # Main buttons
         self.start_button = QPushButton("Start Monitoring and Shutdown")
         self.start_button.setStyleSheet(STYLE_BTN_START)
         layout.addWidget(self.start_button)
