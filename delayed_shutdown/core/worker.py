@@ -49,7 +49,7 @@ class MonitorWorker(QObject):
                 name_str += '...'
             self.progress.emit(f"Waiting for: {name_str}")
 
-            # Dormir de forma más responsiva
+            # Sleep more responsively
             for _ in range(self.interval):
                 if not self._is_running:
                     self.progress.emit("Monitoring canceled.")
