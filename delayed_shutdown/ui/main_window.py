@@ -178,7 +178,7 @@ class ProcessShutdownApp(QMainWindow):
         self.monitor_thread.start()
 
     def on_monitoring_error(self, message):
-        """Maneja errores durante el monitoreo."""
+        """Handles errors during monitoring."""
         QMessageBox.critical(self, "Error", message)
         self.set_ui_state(UIState.IDLE)
 
