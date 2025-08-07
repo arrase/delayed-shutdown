@@ -199,7 +199,7 @@ class ProcessShutdownApp(QMainWindow):
             self.initiate_shutdown()
 
     def cancel_shutdown(self):
-        """Cancela el apagado programado."""
+        """Cancels the scheduled shutdown."""
         self.shutdown_timer.stop()
         self.set_ui_state(UIState.IDLE)
         self.statusBar().showMessage("Shutdown canceled.")
