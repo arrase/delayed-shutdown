@@ -100,7 +100,7 @@ class ProcessShutdownApp(QMainWindow):
         """Actualiza la interfaz según el estado actual."""
         is_idle = state == UIState.IDLE
         
-        # Visibilidad de botones principales
+        # Main button visibility
         self.start_button.setVisible(is_idle or state == UIState.MONITORING)
         self.cancel_button.setVisible(state == UIState.SHUTDOWN_COUNTDOWN)
         
