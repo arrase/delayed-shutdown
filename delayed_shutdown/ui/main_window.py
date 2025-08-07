@@ -97,7 +97,7 @@ class ProcessShutdownApp(QMainWindow):
             self.selected_pids.discard(pid)
 
     def set_ui_state(self, state):
-        """Actualiza la interfaz según el estado actual."""
+        """Updates the interface according to the current state."""
         is_idle = state == UIState.IDLE
         
         # Main button visibility
