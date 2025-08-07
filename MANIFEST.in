@@ -1,5 +1,6 @@
 include README.md
 include LICENSE
-include image.png
+include screenshot.png
+include original_logo.png
 include create_desktop_entry.sh
 graft delayed_shutdown/ui/images
