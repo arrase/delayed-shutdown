@@ -47,7 +47,7 @@ class ProcessShutdownApp(QMainWindow):
         self.setStyleSheet(get_stylesheet())
 
     def _setup_ui(self):
-        """Configures the user interface with improved design."""
+        """Configures the user interface."""
         main_widget = QWidget()
         self.setCentralWidget(main_widget)
         layout = QVBoxLayout(main_widget)
@@ -152,7 +152,7 @@ class ProcessShutdownApp(QMainWindow):
         item.setCheckState(new_state)
 
     def populate_process_list(self):
-        """Populates the process list more efficiently."""
+        """Populates the process list."""
         current_selection = self.selected_pids.copy()
         self.process_list_widget.clear()
         self.selected_pids.clear()
