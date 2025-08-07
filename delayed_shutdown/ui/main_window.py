@@ -168,7 +168,7 @@ class ProcessShutdownApp(QMainWindow):
         self.monitor_worker = MonitorWorker(self.selected_pids, self.interval_spinbox.value())
         self.monitor_worker.moveToThread(self.monitor_thread)
         
-        # Conectar señales
+        # Connect signals
         self.monitor_worker.finished.connect(self.start_shutdown_countdown)
         self.monitor_worker.progress.connect(self.statusBar().showMessage)
         self.monitor_worker.error.connect(self.on_monitoring_error)
