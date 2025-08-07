@@ -81,7 +81,7 @@ class ProcessShutdownApp(QMainWindow):
         layout.addWidget(self.cancel_button)
 
     def _connect_signals(self):
-        """Conecta las señales a sus respectivos slots."""
+        """Connects signals to their respective slots."""
         self.refresh_button.clicked.connect(self.populate_process_list)
         self.start_button.clicked.connect(self.start_monitoring)
         self.cancel_button.clicked.connect(self.cancel_shutdown)
