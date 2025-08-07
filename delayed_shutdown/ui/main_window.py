@@ -25,7 +25,7 @@ class ProcessShutdownApp(QMainWindow):
         self.monitor_worker = None
         self.shutdown_timer = QTimer(self)
         self.countdown = 30
-        self.selected_pids = set()  # Usar set para operaciones más eficientes
+        self.selected_pids = set()  # Use set for more efficient operations
 
         # Initial configuration
         self._setup_ui()
