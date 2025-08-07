@@ -205,7 +205,7 @@ class ProcessShutdownApp(QMainWindow):
         self.statusBar().showMessage("Shutdown canceled.")
 
     def initiate_shutdown(self):
-        """Inicia el proceso de apagado del sistema."""
+        """Initiates the system shutdown process."""
         self.statusBar().showMessage("Shutting down the system...")
         try:
             subprocess.run(["sudo", "shutdown", "-h", "now"], check=True)
