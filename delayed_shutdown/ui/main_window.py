@@ -183,7 +183,7 @@ class ProcessShutdownApp(QMainWindow):
         self.set_ui_state(UIState.IDLE)
 
     def start_shutdown_countdown(self):
-        """Inicia la cuenta atrás para el apagado."""
+        """Starts the countdown for shutdown."""
         self.set_ui_state(UIState.SHUTDOWN_COUNTDOWN)
         self.countdown = self.shutdown_spinbox.value()
         self.update_shutdown_countdown()
