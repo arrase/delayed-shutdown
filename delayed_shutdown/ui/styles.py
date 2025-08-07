@@ -6,7 +6,7 @@ from functools import lru_cache
 @lru_cache(maxsize=1)
 def get_stylesheet():
     """
-    Genera la hoja de estilos para la aplicación, usando caché para mejorar rendimiento.
+    Generates the stylesheet for the application, using cache to improve performance.
     """
     with resources.path("delayed_shutdown.ui.images", "unchecked.svg") as unchecked_path:
         unchecked_path_str = str(unchecked_path).replace("\\", "/")
