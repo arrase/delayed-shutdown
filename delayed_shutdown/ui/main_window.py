@@ -132,7 +132,7 @@ class ProcessShutdownApp(QMainWindow):
         
         try:
             current_user = psutil.Process().username()
-            # Obtener procesos en una sola llamada
+            # Get processes in a single call
             processes = list(psutil.process_iter(['pid', 'name', 'username']))
             
             # Filtrar y añadir a la lista
