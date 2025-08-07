@@ -142,7 +142,7 @@ class ProcessShutdownApp(QMainWindow):
                     item = QListWidgetItem(f"{proc_info['name']} (PID: {proc_info['pid']})")
                     item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
                     
-                    # Restaurar selección anterior
+                    # Restore previous selection
                     if proc_info['pid'] in current_selection:
                         item.setCheckState(Qt.CheckState.Checked)
                         self.selected_pids.add(proc_info['pid'])
