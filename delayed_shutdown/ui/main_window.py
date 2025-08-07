@@ -56,7 +56,7 @@ class ProcessShutdownApp(QMainWindow):
         controls_layout.addWidget(self.refresh_button)
         controls_layout.addStretch()
         
-        # Configuración de intervalos
+        # Interval configuration
         controls_layout.addWidget(QLabel("Interval (sec):"))
         self.interval_spinbox = QSpinBox()
         self.interval_spinbox.setRange(1, MAX_INTERVAL_SECONDS)
