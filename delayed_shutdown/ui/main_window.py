@@ -160,10 +160,8 @@ class ProcessShutdownApp(QMainWindow):
         try:
             current_user = psutil.Process().username()
             # Get processes in a single call
-            processes = list(psutil.process_iter(['pid', 'name', 'username']))
-            
             # Filter and add to list
-            for proc in processes:
+            for proc in psutil.process_iter(['pid', 'name', 'username']):
                 proc_info = proc.info
                 if proc_info['username'] == current_user and proc_info['name']:
                     item = QListWidgetItem(f"{proc_info['name']} (PID: {proc_info['pid']})")
