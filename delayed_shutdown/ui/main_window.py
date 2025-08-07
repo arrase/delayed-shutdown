@@ -48,7 +48,7 @@ class ProcessShutdownApp(QMainWindow):
         layout.addWidget(QLabel("Processes to monitor:"))
         layout.addWidget(self.process_list_widget)
         
-        # Panel de controles
+        # Control panel
         controls_layout = QHBoxLayout()
         
         # Botón de actualización
