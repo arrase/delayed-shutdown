@@ -6,13 +6,17 @@ from PyQt6.QtWidgets import (
     QListWidget, QListWidgetItem, QPushButton, QLabel, QSpinBox, QMessageBox
 )
 from PyQt6.QtCore import QThread, QTimer, Qt
-from ..constants import (
-    APP_TITLE, MONITORING_INTERVAL_SECONDS, MAX_INTERVAL_SECONDS,
-    DEFAULT_COUNTDOWN_SECONDS, STYLE_BTN_START, STYLE_BTN_CANCEL
-)
 from .styles import get_stylesheet
 from .ui_state import UIState
 from ..core.worker import MonitorWorker
+
+# --- Constantes locales ---
+APP_TITLE = "Automatic Process-based Shutdown"
+MONITORING_INTERVAL_SECONDS = 10
+MAX_INTERVAL_SECONDS = 3600
+DEFAULT_COUNTDOWN_SECONDS = 30
+STYLE_BTN_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px;"
+STYLE_BTN_CANCEL = "background-color: #f44336; color: white; font-weight: bold; padding: 10px;"
 
 class ProcessShutdownApp(QMainWindow):
     def __init__(self):
