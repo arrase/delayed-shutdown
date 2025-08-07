@@ -51,7 +51,7 @@ class ProcessShutdownApp(QMainWindow):
         # Control panel
         controls_layout = QHBoxLayout()
         
-        # Botón de actualización
+        # Refresh button
         self.refresh_button = QPushButton("Refresh")
         controls_layout.addWidget(self.refresh_button)
         controls_layout.addStretch()
