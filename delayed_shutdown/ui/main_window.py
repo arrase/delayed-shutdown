@@ -87,6 +87,7 @@ class ProcessShutdownApp(QMainWindow):
         self.cancel_button.clicked.connect(self.cancel_shutdown)
         self.shutdown_timer.timeout.connect(self.update_shutdown_countdown)
         self.process_list_widget.itemChanged.connect(self._update_selected_pids)
+        self.process_list_widget.itemClicked.connect(self.toggle_item_check)
 
     def _update_selected_pids(self, item):
         """Updates the set of selected PIDs when an item's state changes."""
