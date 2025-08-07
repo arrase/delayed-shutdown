@@ -104,7 +104,7 @@ class ProcessShutdownApp(QMainWindow):
         self.start_button.setVisible(is_idle or state == UIState.MONITORING)
         self.cancel_button.setVisible(state == UIState.SHUTDOWN_COUNTDOWN)
         
-        # Habilitación de controles
+        # Control enablement
         self.process_list_widget.setEnabled(is_idle)
         self.refresh_button.setEnabled(is_idle)
         self.interval_spinbox.setEnabled(is_idle)
