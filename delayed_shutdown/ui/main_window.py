@@ -37,7 +37,7 @@ class ProcessShutdownApp(QMainWindow):
         self.setStyleSheet(get_stylesheet())
 
     def _setup_ui(self):
-        """Configura la interfaz de usuario con un diseño mejorado."""
+        """Configures the user interface with improved design."""
         main_widget = QWidget()
         self.setCentralWidget(main_widget)
         layout = QVBoxLayout(main_widget)
