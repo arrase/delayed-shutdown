@@ -34,7 +34,7 @@ class MonitorWorker(QObject):
             # Update list of PIDs to monitor
             self.pids_to_watch = active_pids
             
-            # Obtener nombres de procesos con cache
+            # Get process names with cache
             names = []
             for pid in active_pids:
                 if pid not in self._process_names:
