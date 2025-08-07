@@ -41,7 +41,7 @@ class MonitorWorker(QObject):
                     try:
                         self._process_names[pid] = psutil.Process(pid).name()
                     except (psutil.NoSuchProcess, psutil.AccessDenied):
-                        self._process_names[pid] = f"PID:{pid}"
+                        self._process_names[pid] = f"Unknown (PID: {pid})"
                 names.append(self._process_names[pid])
                 
             name_str = ', '.join(names[:3])
