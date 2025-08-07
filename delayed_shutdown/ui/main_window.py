@@ -192,7 +192,7 @@ class ProcessShutdownApp(QMainWindow):
         self.set_ui_state(UIState.MONITORING)
 
         self.monitor_thread = QThread()
-        self.monitor_worker = MonitorWorker(self.selected_pids, self.interval_spinbox.value())
+        self.monitor_worker = MonitorWorker(self.selected_pids.copy(), self.interval_spinbox.value())
         self.monitor_worker.moveToThread(self.monitor_thread)
 
         self.monitor_worker.finished.connect(self.start_shutdown_countdown)
