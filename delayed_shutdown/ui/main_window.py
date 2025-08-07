@@ -20,7 +20,7 @@ class ProcessShutdownApp(QMainWindow):
         self.setWindowTitle(APP_TITLE)
         self.setGeometry(100, 100, 600, 500)
 
-        # Inicializar componentes
+        # Initialize components
         self.monitor_thread = None
         self.monitor_worker = None
         self.shutdown_timer = QTimer(self)
