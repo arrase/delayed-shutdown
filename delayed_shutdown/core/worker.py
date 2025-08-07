@@ -33,6 +33,11 @@ class MonitorWorker(QObject):
                 
             # Update list of PIDs to monitor
             self.pids_to_watch = active_pids
+
+            # Cleanup process name cache for PIDs no longer monitored
+            stale_pids = set(self._process_names.keys()) - active_pids
+            for pid in stale_pids:
+                del self._process_names[pid]
             
             # Get process names with cache
             names = []
