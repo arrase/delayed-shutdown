@@ -215,7 +215,7 @@ class ProcessShutdownApp(QMainWindow):
             self.set_ui_state(UIState.IDLE)
 
     def closeEvent(self, event):
-        """Maneja el evento de cierre de la ventana."""
+        """Handles the window close event."""
         if self.monitor_thread and self.monitor_thread.isRunning():
             self.monitor_worker.stop()
             self.monitor_thread.quit()
