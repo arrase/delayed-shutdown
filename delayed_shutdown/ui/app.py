@@ -17,7 +17,8 @@ class App:
 
     def _setup_system_tray(self):
         self.tray_icon = QSystemTrayIcon()
-        self.tray_icon.setIcon(QIcon("/home/arrase/Develop/delayed-shutdown/delayed_shutdown/ui/images/icon.png"))
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images", "icon.png")
+        self.tray_icon.setIcon(QIcon(icon_path))
         self.tray_icon.setToolTip("Delayed Shutdown")
         self.tray_icon.activated.connect(self._on_tray_activated)
         self._setup_tray_menu()
