@@ -1,5 +1,6 @@
 
 import sys
+import os
 from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QAction, QIcon
 from .main_window import ProcessShutdownApp
