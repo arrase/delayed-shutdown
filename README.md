@@ -9,9 +9,11 @@ Tested on Ubuntu ... and should work on Mac OS X (let me know).
 ## Features
 
 - **Process Monitoring:** Select one or more running processes to monitor.
-- **Automatic Shutdown:** The application will automatically shut down the computer once all monitored processes have finished.
-- **Customizable Interval:** Set the monitoring interval to check if the processes have finished.
-- **Shutdown Countdown:** A configurable countdown is initiated before shutting down, which can be canceled.
+- **Automatic Shutdown:** The application automatically shuts down the computer once all monitored processes have finished.
+- **System Tray Integration:** The application runs in the system tray, allowing it to operate in the background without cluttering the desktop. The main window can be opened and hidden easily.
+- **Dynamic and Interactive UI:** The interface changes based on the application's state (idle, monitoring, or shutdown countdown), providing clear visual feedback.
+- **Customizable Intervals:** Set the monitoring interval and the shutdown countdown time.
+- **Responsive Process Selection:** The process list can be refreshed at any time, and selections are preserved. Processes can be selected or deselected with a single click on the item.
 
 ## Installation
 
@@ -32,14 +34,23 @@ The best way to install `delayed-shutdown` is using `pipx`, which installs the a
 
 #### Creating a Desktop Entry on Linux
 
-After installing with `pipx`, you can create a desktop entry to launch the application from your system's application menu.
+After installing with `pipx`, you can create a desktop entry that will automatically start the application pinned to the system tray when you log in.
 
-Run the following command in your terminal to download and execute the creation script.
+This repository includes a helper script, `create_autostart_entry.sh`, which writes a `delayed-shutdown.desktop` file into `~/.config/autostart` and points the `Exec` entry to the `delayed-shutdown` executable (by default `~/.local/bin/delayed-shutdown`, where `pipx` installs user commands).
+
+To download and run the script directly from GitHub, run:
 ```bash
-bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_desktop_entry.sh)
+bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_autostart_entry.sh)
 ```
 
-This will create a `delayed-shutdown.desktop` file in `~/.local/share/applications`. You may need to log out and log back in for the application to appear in your menu.
+Or, if you cloned the repository or have the script locally, run:
+```bash
+bash ./create_autostart_entry.sh
+```
+
+The script will create `~/.config/autostart/delayed-shutdown.desktop`. On next login the application will be started and should appear minimized in the system tray. If your installation path differs from `~/.local/bin`, edit the `Exec` line in the created `.desktop` file or update the script before running it.
+
+If the desktop entry does not seem to work, ensure the `.desktop` file exists at `~/.config/autostart/` and that the `Exec` path is correct for your environment. You may need to log out and log back in for changes to take effect.
 
 ### For Developers
 
@@ -98,15 +109,20 @@ To allow the application to shut down the system without asking for a password, 
 
 ## Usage
 
-After installation, you can run the application from your terminal:
+After installation, run the application from your terminal or the applications menu:
 
 ```bash
 delayed-shutdown
 ```
 
-Or you can find it in your applications menu.
+The application will start minimized in the system tray.
 
-This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
+### Interacting with the Application
+
+- **Show/Hide the window:** A single click on the system tray icon will show or hide the main window.
+- **Main menu:** A right-click on the icon will open a menu with options to show the window or exit the application.
+
+Inside the main window, you can select the processes to monitor, set the monitoring interval, and define the shutdown countdown time. Once you have selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then begin the shutdown countdown.
 
 ## Contributing
 
