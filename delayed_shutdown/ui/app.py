@@ -10,6 +10,7 @@ class App:
         self.app.setQuitOnLastWindowClosed(False)
 
         if not QSystemTrayIcon.isSystemTrayAvailable():
+            QMessageBox.critical(None, "System Tray Not Available", "The system tray is not available on this system. The application cannot start.")
             sys.exit(1)
 
         self.main_window = ProcessShutdownApp()
