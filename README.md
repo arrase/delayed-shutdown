@@ -34,14 +34,23 @@ The best way to install `delayed-shutdown` is using `pipx`, which installs the a
 
 #### Creating a Desktop Entry on Linux
 
-After installing with `pipx`, you can create a desktop entry to launch the application from your system's application menu.
+After installing with `pipx`, you can create a desktop entry that will automatically start the application pinned to the system tray when you log in.
 
-Run the following command in your terminal to download and execute the creation script.
+This repository includes a helper script, `create_autostart_entry.sh`, which writes a `delayed-shutdown.desktop` file into `~/.config/autostart` and points the `Exec` entry to the `delayed-shutdown` executable (by default `~/.local/bin/delayed-shutdown`, where `pipx` installs user commands).
+
+To download and run the script directly from GitHub, run:
 ```bash
-bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_desktop_entry.sh)
+bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_autostart_entry.sh)
 ```
 
-This will create a `delayed-shutdown.desktop` file in `~/.local/share/applications`. You may need to log out and log back in for the application to appear in your menu.
+Or, if you cloned the repository or have the script locally, run:
+```bash
+bash ./create_autostart_entry.sh
+```
+
+The script will create `~/.config/autostart/delayed-shutdown.desktop`. On next login the application will be started and should appear minimized in the system tray. If your installation path differs from `~/.local/bin`, edit the `Exec` line in the created `.desktop` file or update the script before running it.
+
+If the desktop entry does not seem to work, ensure the `.desktop` file exists at `~/.config/autostart/` and that the `Exec` path is correct for your environment. You may need to log out and log back in for changes to take effect.
 
 ### For Developers
 
