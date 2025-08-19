@@ -9,9 +9,11 @@ Tested on Ubuntu ... and should work on Mac OS X (let me know).
 ## Features
 
 - **Process Monitoring:** Select one or more running processes to monitor.
-- **Automatic Shutdown:** The application will automatically shut down the computer once all monitored processes have finished.
-- **Customizable Interval:** Set the monitoring interval to check if the processes have finished.
-- **Shutdown Countdown:** A configurable countdown is initiated before shutting down, which can be canceled.
+- **Automatic Shutdown:** The application automatically shuts down the computer once all monitored processes have finished.
+- **System Tray Integration:** The application runs in the system tray, allowing it to operate in the background without cluttering the desktop. The main window can be opened and hidden easily.
+- **Dynamic and Interactive UI:** The interface changes based on the application's state (idle, monitoring, or shutdown countdown), providing clear visual feedback.
+- **Customizable Intervals:** Set the monitoring interval and the shutdown countdown time.
+- **Responsive Process Selection:** The process list can be refreshed at any time, and selections are preserved. Processes can be selected or deselected with a single click on the item.
 
 ## Installation
 
@@ -98,15 +100,20 @@ To allow the application to shut down the system without asking for a password, 
 
 ## Usage
 
-After installation, you can run the application from your terminal:
+After installation, run the application from your terminal or the applications menu:
 
 ```bash
 delayed-shutdown
 ```
 
-Or you can find it in your applications menu.
+The application will start minimized in the system tray.
 
-This will open a window where you can select the processes to monitor. You can also set the monitoring interval and the shutdown countdown time. Once you've selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then initiate the shutdown countdown.
+### Interacting with the Application
+
+- **Show/Hide the window:** A single click on the system tray icon will show or hide the main window.
+- **Main menu:** A right-click on the icon will open a menu with options to show the window or exit the application.
+
+Inside the main window, you can select the processes to monitor, set the monitoring interval, and define the shutdown countdown time. Once you have selected the desired processes, click "Start Monitoring and Shutdown". The application will wait for all selected processes to close and then begin the shutdown countdown.
 
 ## Contributing
 
