@@ -43,7 +43,12 @@ class MonitorWorker(QObject):
             for pid in list(active_pids):
                 if pid not in self._process_names:
                     try:
-                        self._process_names[pid] = psutil.Process(pid).name()
+                        proc = psutil.Process(pid)
+                        cmdline = proc.cmdline()
+                        if cmdline:
+                            self._process_names[pid] = ' '.join(cmdline)
+                        else:
+                            self._process_names[pid] = proc.name()
                     except psutil.NoSuchProcess:
                         # Remove PID from active_pids if process no longer exists
                         active_pids.discard(pid)

@@ -161,10 +161,17 @@ class ProcessShutdownApp(QMainWindow):
             current_user = psutil.Process().username()
             # Get processes in a single call
             # Filter and add to list
-            for proc in psutil.process_iter(['pid', 'name', 'username']):
+            for proc in psutil.process_iter(['pid', 'name', 'username', 'cmdline']):
                 proc_info = proc.info
                 if proc_info['username'] == current_user and proc_info['name']:
-                    item = QListWidgetItem(f"{proc_info['name']} (PID: {proc_info['pid']})")
+                    # Use cmdline if available, otherwise fallback to name
+                    cmdline = proc_info.get('cmdline')
+                    if cmdline:
+                        display_name = ' '.join(cmdline)
+                    else:
+                        display_name = proc_info['name']
+
+                    item = QListWidgetItem(f"{display_name} (PID: {proc_info['pid']})")
                     # Remove ItemIsUserCheckable to prevent user interaction with checkboxes
                     item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
                     
