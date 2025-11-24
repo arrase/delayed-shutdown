@@ -8,9 +8,9 @@ def get_stylesheet():
     """
     Generates the stylesheet for the application, using cache to improve performance.
     """
-    with resources.path("delayed_shutdown.ui.images", "unchecked.svg") as unchecked_path:
+    with resources.path("delayed_shutdown.images", "unchecked.svg") as unchecked_path:
         unchecked_path_str = str(unchecked_path).replace("\\", "/")
-    with resources.path("delayed_shutdown.ui.images", "checked.svg") as checked_path:
+    with resources.path("delayed_shutdown.images", "checked.svg") as checked_path:
         checked_path_str = str(checked_path).replace("\\", "/")
 
     return f"""
