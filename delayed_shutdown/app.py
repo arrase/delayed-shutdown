@@ -1,16 +1,96 @@
 import sys
-import subprocess
+import os
+import time
 import psutil
+import subprocess
+from enum import Enum, auto
 from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem, QPushButton, QLabel, QSpinBox, QMessageBox
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout,
+    QListWidget, QListWidgetItem, QPushButton, QLabel, QSpinBox, QMessageBox,
+    QMainWindow, QSystemTrayIcon, QMenu
 )
-from PyQt6.QtCore import QThread, QTimer, Qt
+from PyQt6.QtCore import QObject, pyqtSignal, QThread, QTimer, Qt
+from PyQt6.QtGui import QAction, QIcon
 from .styles import get_stylesheet
-from .ui_state import UIState
-from ..core.worker import MonitorWorker
 
-# --- Constantes locales ---
+# --- UI State ---
+class UIState(Enum):
+    IDLE = auto()
+    MONITORING = auto()
+    SHUTDOWN_COUNTDOWN = auto()
+
+# --- Worker ---
+class MonitorWorker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(str)
+    error = pyqtSignal(str)
+
+    def __init__(self, pids_to_watch, interval):
+        super().__init__()
+        self.pids_to_watch = set(pids_to_watch)  # Use set for more efficient searches
+        self.interval = interval
+        self._is_running = True
+        self._process_names = {}  # Cache for process names
+
+    def run(self):
+        if not self.pids_to_watch:
+            self.error.emit("No processes were selected.")
+            return
+
+        self.progress.emit(f"Monitoring {len(self.pids_to_watch)} process(es)...")
+        
+        while self._is_running and self.pids_to_watch:
+            # Update list of existing PIDs more efficiently
+            active_pids = {pid for pid in self.pids_to_watch if psutil.pid_exists(pid)}
+            
+            # If no active processes remain, terminate
+            if not active_pids:
+                self.progress.emit("All processes have finished.")
+                self.finished.emit()
+                break
+                
+            # Update list of PIDs to monitor
+            self.pids_to_watch = active_pids
+
+            # Cleanup process name cache for PIDs no longer monitored
+            self._process_names = {pid: name for pid, name in self._process_names.items() if pid in active_pids}
+            
+            # Get process names with cache
+            names = []
+            # Make a copy of active_pids to iterate, since we may remove items
+            for pid in list(active_pids):
+                if pid not in self._process_names:
+                    try:
+                        proc = psutil.Process(pid)
+                        cmdline = proc.cmdline()
+                        if cmdline:
+                            self._process_names[pid] = ' '.join(cmdline)
+                        else:
+                            self._process_names[pid] = proc.name()
+                    except psutil.NoSuchProcess:
+                        # Remove PID from active_pids if process no longer exists
+                        active_pids.discard(pid)
+                        continue  # Don't add to names list
+                    except psutil.AccessDenied:
+                        self._process_names[pid] = f"Unknown (PID: {pid})"
+                names.append(self._process_names[pid])
+                
+            name_str = ', '.join(names[:3])
+            if len(names) > 3:
+                name_str += '...'
+            self.progress.emit(f"Waiting for: {name_str}")
+
+            # Sleep more responsively
+            for _ in range(self.interval):
+                if not self._is_running:
+                    self.progress.emit("Monitoring canceled.")
+                    return
+                time.sleep(1)
+
+    def stop(self):
+        self._is_running = False
+
+# --- Main Window ---
 APP_TITLE = "Automatic Process-based Shutdown"
 MONITORING_INTERVAL_SECONDS = 10
 MAX_INTERVAL_SECONDS = 3600
@@ -267,3 +347,56 @@ class ProcessShutdownApp(QMainWindow):
             except RuntimeError:
                 pass  # Thread already deleted
         event.accept()
+
+# --- App ---
+class App:
+    def __init__(self, app: QApplication):
+        self.app = app
+        self.app.setQuitOnLastWindowClosed(False)
+
+        if not QSystemTrayIcon.isSystemTrayAvailable():
+            QMessageBox.critical(None, "System Tray Not Available", "The system tray is not available on this system. The application cannot start.")
+            sys.exit(1)
+
+        self.main_window = ProcessShutdownApp()
+        self._setup_system_tray()
+
+    def _setup_system_tray(self):
+        self.tray_icon = QSystemTrayIcon()
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images", "icon.png")
+        self.tray_icon.setIcon(QIcon(icon_path))
+        self.tray_icon.setToolTip("Delayed Shutdown")
+        self.tray_icon.activated.connect(self._on_tray_activated)
+        self._setup_tray_menu()
+        self.tray_icon.show()
+
+    def _setup_tray_menu(self):
+        menu = QMenu()
+        show_action = QAction("Show", self.main_window)
+        show_action.triggered.connect(self._show_window)
+        menu.addAction(show_action)
+        menu.addSeparator()
+        exit_action = QAction("Exit", self.main_window)
+        exit_action.triggered.connect(self.app.quit)
+        menu.addAction(exit_action)
+        self.tray_icon.setContextMenu(menu)
+
+    def _show_window(self):
+        self.main_window.showNormal()
+        self.main_window.activateWindow()
+
+    def _on_tray_activated(self, reason):
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:
+            if self.main_window.isVisible():
+                self.main_window.hide()
+            else:
+                self._show_window()
+
+    def run(self):
+        self.main_window.hide()
+        return self.app.exec()
+
+def main():
+    app = QApplication(sys.argv)
+    main_app = App(app)
+    sys.exit(main_app.run())
