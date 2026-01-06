@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delayed Shutdown - Automatic Process-based Power Management</title>
+    <link rel="icon" type="image/x-icon" href="img/original_logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <img src="img/original_logo.png" alt="DS Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+                    Delayed<span>Shutdown</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="https://github.com/arrase/delayed-shutdown" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <img src="img/original_logo.png" alt="Delayed Shutdown Logo" style="width: 120px; margin-bottom: 20px;">
+            <h1>Automate Your Shutdown</h1>
+            <p>A simple yet powerful tool to shut down your computer automatically after specified processes have finished executing.</p>
+            <a href="#installation" class="cta-button">Get Started</a>
+            
+            <div class="screenshot-container">
+                <img src="img/screenshot.png" alt="Delayed Shutdown Interface" class="hero-image">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🔍</span>
+                <h3>Process Monitoring</h3>
+                <p>Select one or more running processes to monitor directly from an active list. The application watches them for you.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⏱️</span>
+                <h3>Automatic Action</h3>
+                <p>Once all monitored processes finish, the computer automatically initiates a shutdown sequence.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🖥️</span>
+                <h3>System Tray Integration</h3>
+                <p>Runs quietly in the background. Minimize to the system tray to keep your workspace clutter-free while it works.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚙️</span>
+                <h3>Customizable</h3>
+                <p>Adjust monitoring intervals and shutdown countdown timers to suit your specific needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="installation" class="container">
+        <h2>Installation</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #b2bec3;">The recommended way to install is using <code>pipx</code> to keep dependencies isolated.</p>
+        
+        <div class="command-list">
+            <div class="command-item">
+                <h3>1. Install with pipx</h3>
+                <p>Install the application directly from the GitHub repository:</p>
+                <pre><code>pipx install git+https://github.com/arrase/delayed-shutdown.git</code></pre>
+            </div>
+
+            <div class="command-item">
+                <h3>2. Create Desktop Entry (Linux)</h3>
+                <p>Generate an autostart entry to have the app ready in your system tray on login:</p>
+                <pre><code>bash <(curl -sS https://raw.githubusercontent.com/arrase/delayed-shutdown/refs/heads/main/create_autostart_entry.sh)</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" class="container">
+        <h2>How It Works</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>1. Select Processes</h3>
+                <p>Launch the application and select the running processes you want to wait for from the list.</p>
+            </div>
+            <div class="feature-card">
+                <h3>2. Start Monitoring</h3>
+                <p>Click "Start Monitoring". The app will minimize to the tray and check the process status periodically.</p>
+            </div>
+            <div class="feature-card">
+                <h3>3. Auto Shutdown</h3>
+                <p>When the processes end, a countdown begins. You can cancel it if you return, otherwise—shutdown!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Delayed Shutdown. Built by <a href="https://github.com/arrase" style="color: var(--primary-color); text-decoration: none;">Juan Ezquerro LLanes</a>.</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Licensed under MIT License</p>
+        </div>
+    </footer>
+</body>
+</html>
